@@ -3,7 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zqy.weatherdemo.WeatherActivity">
+    tools:context="com.zqy.weatherdemo.WeatherActivity"
+    android:background="#000">
+
+    <ImageView
+        android:id="@+id/bing_pic_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
     <ScrollView
         android:id="@+id/weather_layout"
         android:layout_width="match_parent"
