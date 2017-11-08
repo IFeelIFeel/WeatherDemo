@@ -8,13 +8,9 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.IntDef;
 
-import com.bumptech.glide.Glide;
-import com.zqy.weatherdemo.WeatherActivity;
 import com.zqy.weatherdemo.gson.Weather;
 import com.zqy.weatherdemo.util.HttpUtil;
-import com.zqy.weatherdemo.util.ToastUtils;
 import com.zqy.weatherdemo.util.Utility;
 
 import java.io.IOException;
@@ -24,8 +20,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class AutoUpdateService extends Service {
-    public AutoUpdateService() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -37,12 +31,12 @@ public class AutoUpdateService extends Service {
         undateWeather();
         undateBingPic();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int anHour = 8 * 60 * 60 * 1000;//8hour的毫秒数
+        int anHour = 8 * 60 * 60 * 1000;//8小时的毫秒数
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this, AutoUpdateService.class);
         PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
         manager.cancel(pi);
-        manager.set(AlarmManager.RTC_WAKEUP, triggerAtTime, pi);
+        manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -59,7 +53,7 @@ public class AutoUpdateService extends Service {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String bingPic = response.body().string();
+                String bingPic = response.body().string();
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this)
                         .edit();
                 editor.putString("bing_pic", bingPic);
